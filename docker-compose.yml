@@ -1,0 +1,22 @@
+services:
+  api:
+    build: ./api
+    ports:
+      - "127.0.0.1:5000:5000"
+    networks:
+      - internal
+
+  gateway:
+    image: nginx:1.27-alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./logs:/var/log/nginx/security
+    depends_on:
+      - api
+    networks:
+      - internal
+
+networks:
+  internal:
